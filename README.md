@@ -18,6 +18,8 @@ A *minimalist* form of Two-Way sync can be achieved by combining the Integration
 2. Add some (shadow) field(s) to that entity in Fibery - these fields will **not** be read only.
 3. Set up a webhook to publish changes to the entity back to your Laravel.
 4. Configure the webhook handler to update your model's real field(s) from changes to the shadow field(s).
+5. Any fields (not the shadow fields) that change in Laravel will be updated in Fibery the next time the
+Integrations sync runs.
 
 This is **not** ideal or perfect, but it's the best that the Fibery APIs can do at the moment.  
 Unfortunately the Fibery Integrations API does not support any updates and it probably won't any time soon.  
@@ -54,19 +56,20 @@ php artisan migrate
 php artisan db:seed FiberyMapSeeder
 ```
 
-The FiberyMap seeder will connect to Fibery via the API and populate the fibery_map table with all of your Fibery types and fields, but without the Laravel model and field names set.  
+The `FiberyMap` seeder will connect to Fibery via the API and populate the `fibery_map` table with all of your
+Fibery types and fields, but without the Laravel model and field names set.  
 You can run this seeder as often as you need to if you add types or fields to Fibery.
 
 ## Authentication and Authorisation
 
-Unfortunately the Fibery Integrations and Webhooks APIs do not cater for bearer token authentication,
+Unfortunately the Fibery Integrations and Webhooks APIs do not cater for bearer token authentication (yet),
 so authentication on the Laravel side is with personal access tokens passed as part of the url (for webhooks)
 or request variables (for Integrations).
 
 As such your application has to support personal access tokens to these two APIs.
 
-Authorisation is via a `Gate` that can be configured in the config file.  The default is `fibery_access` so you
-either have to add this gate to your applicaiton or configure it to use another, existing gate.
+Authorisation is via a `Gate` that can be configured in the config file.  The default gate is  `fibery_access`
+so you either have to add this gate to your applicaiton or configure it to use another, existing gate.
 
 ## Integrations API
 
