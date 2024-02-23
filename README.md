@@ -91,9 +91,9 @@ The package provides a `mvnrsa\FiberyAPIs\FiberyClient` class that has methods f
 ## Webhooks
 
 If you are planning to use the webhooks you have to publish and run the migrations and seeder as above.   
-Then you have to edit the rows in the `fibery_map` table to set the laravel model and fields names
-and mark some fields a reference fields.  Reference fields are used by the API client to match entities
-in Fibery to models in Laravel.
+Then you have to edit the rows in the `fibery_map` table to set the laravel model and field names
+and mark some fields for each model as reference fields.  Reference fields are used by the API client to
+match entities in Fibery to models in Laravel.
 
 Then you can call the `add_webhook` method with a type name to generate a unique url and set up the webhook
 in Fibery.
@@ -101,21 +101,21 @@ in Fibery.
 The method accepts a second `tag` parameter which adds a tag to the webhook url to make finding calls in log files
 easier.
 
-Use the `webhooks` method to list any existing webhooks and the `delete_webhook` method to deleted one.
+Use the `webhooks` method to list any existing webhooks and the `delete_webhook` method to delete one.
 
 ### Caution
 
 Note that for the webhooks to really work, you have to have the `fibery_map` set up properly with the
-Fibery and Laravel entity/model and field names and have some fields marked a reference fields so that
+Fibery and Laravel entity/model and field names and have some fields marked as reference fields so that
 the API client can figure out which enities map to which models.
 
 Unfortunately the webhook payloads (effects) do not contain enough data on their own to make such a determination
 so the client has to fetch more fields from Fibery to match the first time a specific model is updated.
-The fibery IDs of the models are stored using a FiberyMap model and the fibery_map table.
+The Fibery IDs of the models are stored using a `FiberyMap` model in the `fibery_map` table.
 
 ### Example
 
-Using our hypothetical Currency model as an example again, Fibery may have a `Code` field that matched the model's
-`code` column.  Then the `Currency/Code` field can be set up to match `code` and `Currency` and if is marked as
-a refernce field the API client will use the Code/code to figur out which model in Laravel matches which entity
+Using our hypothetical Currency model as an example again, Fibery may have a `Code` field that matches the model's
+`code` column.  Then the `Currency/Code` field can be set up to match `code` and `Currency` and if it is marked as
+a refernce field the API client will use the Code/code to figure out which model in Laravel matches which entity
 in Fibery.
