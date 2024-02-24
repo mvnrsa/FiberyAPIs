@@ -112,6 +112,8 @@ easier.
 
 Use the `webhooks` method to list any existing webhooks and the `delete_webhook` method to delete one.
 
+Note that the webhooks are processed via your default queue using a `FiberyWebhookJob` job.
+
 ### Caution
 
 Note that for the webhooks to really work, you have to have the `fibery_map` set up properly with the
@@ -120,7 +122,8 @@ the API client can figure out which enities map to which models.
 
 Unfortunately the webhook payloads (effects) do not contain enough data on their own to make such a determination
 so the client has to fetch more fields from Fibery to match *the first time* a specific model is updated.
-The Fibery IDs of the models are stored using a `FiberyMap` model in the `fibery_map` table.
+The Fibery IDs of the models are stored using a `FiberyMap` model in the `fibery_map` table which is then used
+for all subsequent updates.
 
 ### Example
 
