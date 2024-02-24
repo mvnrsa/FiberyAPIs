@@ -42,7 +42,7 @@ Publish the config file:
 php artisan vendor:publish --tag=fibery-config
 ```
 
-Set your Fibery host and api token in `config/fibery.php`.
+Set your Fibery host and api token in `.env`.
 ```
 FIBERY_HOST=yourhost.fibery.io
 FIBERY_API_TOKEN=your_token
