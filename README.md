@@ -74,10 +74,18 @@ so you either have to add this gate to your applicaiton or configure it to use a
 ## Integrations API
 
 If all you want is to publish your models to Fibery all you need to do is add your types with the corresponding
-model classes and fields to the config file.  
-There is a sensible sample using a hypothetical currencies type in the config file.
+model classes and fields to the config file and change `integrations_enabled` to `true`.
+There is a sensible sample of a hypothetical currencies type in the config file.
 
 Then simply point your Fibery integration to `https://your.laravel.host/api/fibery` and let Fibery do the rest. :-)
+
+The built-in code uses `Model::all()` to fetch all rows and then applies `->only($field)` to each model to
+return only the configured fields.  Note that you can include any attribute(s) from your model, not only columns
+from the database, but unfortunately this is not well suited to large datasets (yet).
+
+If you want to do something more complex, such as filtering or aggregating your data, you can add a
+`getFiberyData()`method to your model that returns the items in a two dimensional array.
+The built-in code checks for and uses the method if it exists.
 
 ## REST API
 
@@ -90,14 +98,15 @@ The package provides a `mvnrsa\FiberyAPIs\FiberyClient` class that has methods f
 
 ## Webhooks
 
-If you are planning to use the webhooks you have to publish and run the migrations and seeder as above.   
+If you are planning to use the webhooks you have to publish and run the migrations and seeder as above
+and change `webhooks_enabled` to true in the config file.   
+
 Then you have to edit the rows in the `fibery_map` table to set the laravel model and field names
 and mark some fields for each model as reference fields.  Reference fields are used by the API client to
 match entities in Fibery to models in Laravel.
 
 Then you can call the `add_webhook` method with a type name to generate a unique url and set up the webhook
 in Fibery.
-
 The method accepts a second `tag` parameter which adds a tag to the webhook url to make finding calls in log files
 easier.
 
@@ -110,12 +119,14 @@ Fibery and Laravel entity/model and field names and have some fields marked as r
 the API client can figure out which enities map to which models.
 
 Unfortunately the webhook payloads (effects) do not contain enough data on their own to make such a determination
-so the client has to fetch more fields from Fibery to match the first time a specific model is updated.
+so the client has to fetch more fields from Fibery to match *the first time* a specific model is updated.
 The Fibery IDs of the models are stored using a `FiberyMap` model in the `fibery_map` table.
 
 ### Example
 
 Using our hypothetical Currency model as an example again, Fibery may have a `Code` field that matches the model's
-`code` column.  Then the `Currency/Code` field can be set up to match `code` and `Currency` and if it is marked as
-a refernce field the API client will use the Code/code to figure out which model in Laravel matches which entity
-in Fibery.
+`code` column.  Then the `Currency/Code` field can be set up to match the `code` column on your `Currency` model
+and if it is marked as a refernce field the API client will use the Code/code to figure out which model in
+Laravel matches which entity in Fibery.
+
+If you mark multiple fields for a specific model as reference fields they all have to match.
