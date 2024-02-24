@@ -79,7 +79,7 @@ There is a sensible sample of a hypothetical currencies type in the config file.
 
 Then simply point your Fibery integration to `https://your.laravel.host/api/fibery` and let Fibery do the rest. :-)
 
-The built-in code uses `Model::all()` to fetch all rows and then applies `->only($field)` to each model to
+The built-in code uses `Model::all()` to fetch all rows and then applies `->only($fields)` to each model to
 return only the configured fields.  Note that you can include any attribute(s) from your model, not only columns
 from the database, but unfortunately this is not well suited to large datasets (yet).
 
