@@ -66,7 +66,7 @@ Unfortunately the Fibery Integrations and Webhooks APIs do not cater for bearer 
 so authentication on the Laravel side is with personal access tokens passed as part of the url (for webhooks)
 or request variables (for Integrations).
 
-As such your application has to support personal access tokens to these two APIs.
+As such your application has to support creating personal access tokens for use with these two APIs.
 
 Authorisation is via a `Gate` that can be configured in the config file.  The default gate is  `fibery_access`
 so you either have to add this gate to your applicaiton or configure it to use another, existing gate.
